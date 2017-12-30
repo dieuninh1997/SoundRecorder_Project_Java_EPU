@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wave="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="3"
+    >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        >
+        <developer.shivam.library.WaveView
+            android:id="@+id/sample_wave_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            wave:wave_height="2"
+            wave:wave_speed="0"
+            />
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_chronometer"
+            android:layout_gravity="center_horizontal|center_vertical"
+            />
+        <!--hiện đếm giây ghi âm-->
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+
+        >
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/btnRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/marginBottom"
+            android:src="@drawable/ic_mic_white_24px"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_colorPressed="@color/colorPrimary"
+            />
+
+
+        <Button
+            android:id="@+id/btnPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/marginBottom"
+            android:layout_marginStart="10dp"
+            android:drawableLeft="@drawable/ic_pause_white_24px"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/pause"
+            android:textAllCaps="true"
+            android:visibility="invisible"
+            />
+
+        <TextView
+            android:id="@+id/recording_status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btnRecord"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/marginBottom"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/record_prompt"
+            android:textColor="@android:color/black"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+</LinearLayout>

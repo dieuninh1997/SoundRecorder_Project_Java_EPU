@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Sound Recorder</string>
+    <string name="pause_recording_button">Pause</string>
+    <string name="pause">Pause</string>
+    <string name="record_prompt">Press the button to start recording</string>
+    <string name="need_allow">Need to allow permission to app used</string>
+    <string name="resume_recording_button">Resume</string>
+    <string name="toast_recording_start">Start recording</string>
+    <string name="record_in_progress">Recording</string>
+    <string name="recording">Recording</string>
+    <string name="click_to_stop">Click to stop</string>
+    <string name="default_file_name">My recording</string>
+    <string name="toast_recording_finish">Saved to</string>
+    <string name="dialog_title_delete">Delete file</string>
+    <string name="dialog_text_delete">Are yout sure that you would like to delete this file?</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">CANCEL</string>
+    <string name="dialog_title_rename">Rename file</string>
+    <string name="toast_file_exists">The file %1$s already exits. Please choose a different...</string>
+    <string name="send_to">Send to</string>
+    <string name="toast_file_delete">%1$s successfully deleted</string>
+    <string name="notification_recording">Recording...</string>
+</resources>
