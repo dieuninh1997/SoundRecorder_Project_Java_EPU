@@ -2,6 +2,7 @@ package com.dieuninh.soundrecorder.soundrecorder.adapters;
 
 
 import android.app.AlertDialog;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -26,10 +27,12 @@ import android.widget.Toast;
 import java.io.File;
 
 import com.dieuninh.soundrecorder.soundrecorder.R;
+import com.dieuninh.soundrecorder.soundrecorder.activities.TrimRecordingActivity;
 import com.dieuninh.soundrecorder.soundrecorder.data.DBHelper;
 import com.dieuninh.soundrecorder.soundrecorder.data.RecordItem;
 import com.dieuninh.soundrecorder.soundrecorder.fragments.PlaybackFragment;
 import com.dieuninh.soundrecorder.soundrecorder.listeners.OnDatabaseChangedListener;
+import com.dieuninh.soundrecorder.soundrecorder.utility.Constant;
 
 
 /**
@@ -119,13 +122,13 @@ public class SavedRecordAdapter
                     deleteFileDialog(holder.getPosition());
                 }
             });
-//
-//        holder.btnTrim.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mContext.startActivity(new Intent(mContext, TrimRecordingActivity.class));
-//            }
-//        });
+
+        holder.btnTrim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendFilePathAudioName(holder.getPosition());
+            }
+        });
         }
         else
         {
@@ -133,6 +136,14 @@ public class SavedRecordAdapter
         }
     }
 
+    public void sendFilePathAudioName(int position)
+    {
+        RecordItem data =getItem(position);
+        Intent intent = new Intent(mContext, TrimRecordingActivity.class);
+        intent.putExtra(Constant.FILE_PATH, data.getFilePath());
+      //  intent.putExtra(Constant.ARTWORK, data.song_artwork);
+        mContext.startActivity(intent);
+    }
     private void deleteFileDialog(final int position) {
         AlertDialog.Builder deleteFileBuilder = new AlertDialog.Builder(mContext);
         deleteFileBuilder.setTitle(mContext.getString(R.string.dialog_title_delete));

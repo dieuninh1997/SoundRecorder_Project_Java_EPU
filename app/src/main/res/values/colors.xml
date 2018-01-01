@@ -13,4 +13,10 @@
     <color name="timecode">#ddffffdd</color>
     <color name="timecode_shadow">#aa000000</color>
     <color name="color_grey">#69cccccc</color>
+    <color name="default_txt_back">#2b2b2b</color>
+    <color name="cover_color_grenn_aph">#edf9e9</color>
+    <color name="default_txt_black_second">#909090</color>
+    <color name="default_green_color">#0bb908</color>
+    <color name="default_white_color">#ffffffff</color>
+    <color name="crowdfund_info_grey_color">#BCBCBC</color>
 </resources>

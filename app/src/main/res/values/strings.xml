@@ -16,8 +16,17 @@
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">CANCEL</string>
     <string name="dialog_title_rename">Rename file</string>
-    <string name="toast_file_exists">The file %1$s already exits. Please choose a different...</string>
+    <string name="toast_file_exists">The file %1$s already exits. Please choose a different(...,&#8230;)</string>
     <string name="send_to">Send to</string>
     <string name="toast_file_delete">%1$s successfully deleted</string>
-    <string name="notification_recording">Recording...</string>
+    <string name="notification_recording">Recording(...,&#8230;)</string>
+    <string name="audio_cancel">Cancle</string>
+    <string name="audio_cut">Cut</string>
+    <string name="audio_add_bgm">Add BGM</string>
+    <string name="audio_delete">Delete</string>
+    <string name="audio_save">Save</string>
+    <string name="btn_save">Save</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="to00">0:0</string>
 </resources>

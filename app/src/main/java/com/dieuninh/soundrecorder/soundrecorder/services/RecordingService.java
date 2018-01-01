@@ -84,7 +84,7 @@ public class RecordingService extends Service {
         do {
             count++;
             mFileName = getString(R.string.default_file_name)
-                    + " #" + (mDatabase.getCount() + count) + ".mp4";
+                    + " #" + (mDatabase.getCount() + count) + ".mp3";
             mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
             mFilePath =mFilePath+ "/SoundRecorder/" + mFileName;
 
@@ -117,13 +117,24 @@ public class RecordingService extends Service {
     public void startRecording() {
 
         setFileNameAndPath();
-
+//cai dat quality:
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mRecorder.setOutputFile(mFilePath);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        //file.acc
+        mRecorder.setAudioEncodingBitRate(128000);//ok
+        mRecorder.setAudioSamplingRate(44100);
+        /*
+        * loai format MPEG_4 và encoder ACC  sẽ cho file size 85kb/15sec-> very poor quality
+        *
+        * nếu cài đặt format AMR_NB và encodr AMR_NB sẽ cho file size 25kb/15 sec -> better quality  nhưng ko chay trên iphone đc
+         *
+         *
+         * tăng bitrate value if want change quality
+         * bit rate :bits per second, not kb per second
+         *
+        * */
         mRecorder.setAudioChannels(1);
 
         try {
