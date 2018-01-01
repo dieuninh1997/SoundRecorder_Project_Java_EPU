@@ -192,6 +192,8 @@ public class TrimRecordingActivity extends AppCompatActivity implements View.OnC
 
     }
 
+    /*TODO: bug đoạn lôi progress bar lại thì chorme chạy tiếp ++
+    * */
     private void saveRingtone(String fPath, double start_point, double end_point) {
 
     }
