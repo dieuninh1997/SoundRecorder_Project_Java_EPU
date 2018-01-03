@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.dieuninh.soundrecorder.soundrecorder.listeners.OnDatabaseChangedListener;
@@ -13,15 +14,9 @@ import com.dieuninh.soundrecorder.soundrecorder.listeners.OnDatabaseChangedListe
 import java.sql.SQLException;
 import java.util.Comparator;
 
-/**
- * Created by DieuLinh on 3/30/2017.
- */
-
 public class DBHelper extends SQLiteOpenHelper {
     private Context mContext;
-
     private static final String LOG_TAG = "DBHelper";
-
     private static OnDatabaseChangedListener mOnDatabaseChangedListener;
 
     public static final String DATABASE_NAME = "saved_recorder.db";
@@ -63,6 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
+        Log.e("DBHelper","Dem="+getCount());
     }
 
     public static void setOnDatabaseChangedListener(OnDatabaseChangedListener listener) {
@@ -109,18 +105,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    public Context getContext() {
-        return mContext;
-    }
-
-    public class RecordingComparator implements Comparator<RecordItem> {
-        public int compare(RecordItem item1, RecordItem item2) {
-            Long o1 = item1.getTime();
-            Long o2 = item2.getTime();
-            return o2.compareTo(o1);
-        }
-    }
-
     public long addRecording(String recordingName,
                              String filePath, long length) {
 
@@ -130,8 +114,14 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(DBHelperItem.COLUMN_NAME_RECORDING_FILE_PATH, filePath);
         cv.put(DBHelperItem.COLUMN_NAME_RECORDING_LENGTH, length);
         cv.put(DBHelperItem.COLUMN_NAME_TIME_ADDED, System.currentTimeMillis());
-        return db.insert(DBHelperItem.TABLE_NAME, null, cv);
+      //  return db.insert(DBHelperItem.TABLE_NAME, null, cv);
+        long rowId = db.insert(DBHelperItem.TABLE_NAME, null, cv);
 
+        if (mOnDatabaseChangedListener != null) {
+            mOnDatabaseChangedListener.onNewDatabaseEntryAdded();
+        }
+
+        return rowId;
     }
 
     public void renameItem(RecordItem item, String recordingName, String filePath) {
@@ -147,7 +137,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public long restoreRecording(RecordItem item) {
+    /*public long restoreRecording(RecordItem item) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(DBHelperItem.COLUMN_NAME_RECORDING_NAME, item.getName());
@@ -160,5 +150,19 @@ public class DBHelper extends SQLiteOpenHelper {
             mOnDatabaseChangedListener.onNewDatabaseEntryAdded();
         }
         return rowId;
+    }*/
+
+
+   /* public Context getContext() {
+        return mContext;
     }
+*/
+  /*  public class RecordingComparator implements Comparator<RecordItem> {
+        public int compare(RecordItem item1, RecordItem item2) {
+            Long o1 = item1.getTime();
+            Long o2 = item2.getTime();
+            return o2.compareTo(o1);
+        }
+    }*/
+
 }

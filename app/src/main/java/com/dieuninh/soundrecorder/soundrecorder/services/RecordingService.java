@@ -1,8 +1,6 @@
 package com.dieuninh.soundrecorder.soundrecorder.services;
 
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,24 +8,16 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-//import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.dieuninh.soundrecorder.soundrecorder.R;
-import com.dieuninh.soundrecorder.soundrecorder.activities.MainActivity;
 import com.dieuninh.soundrecorder.soundrecorder.data.DBHelper;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-
-/**
- * Created by DieuLinh on 4/1/2017.
- */
 
 public class RecordingService extends Service {
     private static final String LOG_TAG =RecordingService.class.getSimpleName();
@@ -42,11 +32,14 @@ public class RecordingService extends Service {
     private long mElapsedMillis = 0;
     private int mElapsedSeconds = 0;
     private RecordingService.OnTimerChangedListener onTimerChangedListener = null;
-    private static final SimpleDateFormat mTimerFormat = new SimpleDateFormat("mm:ss", Locale.getDefault());
+  //  private static final SimpleDateFormat mTimerFormat = new SimpleDateFormat("mm:ss", Locale.getDefault());
 
     private Timer mTimer = null;
     private TimerTask mIncrementTimerTask = null;
 
+    public interface OnTimerChangedListener {
+        void onTimerChanged(int seconds);
+    }
 
     @Nullable
     @Override
@@ -54,9 +47,6 @@ public class RecordingService extends Service {
         return null;
     }
 
-    public interface OnTimerChangedListener {
-        void onTimerChanged(int seconds);
-    }
 
     @Override
     public void onCreate() {
@@ -95,7 +85,6 @@ public class RecordingService extends Service {
         mRecorder.stop();
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
         mRecorder.release();
-
 
         //remove notification
         if (mIncrementTimerTask != null) {

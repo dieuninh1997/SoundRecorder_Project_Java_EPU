@@ -35,39 +35,29 @@ import com.dieuninh.soundrecorder.soundrecorder.listeners.OnDatabaseChangedListe
 import com.dieuninh.soundrecorder.soundrecorder.utility.Constant;
 
 
-/**
- * Created by DieuLinh on 3/31/2017.
- */
-
-public class SavedRecordAdapter
-        extends RecyclerView.Adapter<SavedRecordAdapter.RecordingsViewHolder>
+public class SavedRecordAdapter extends RecyclerView.Adapter<SavedRecordAdapter.RecordingsViewHolder>
         implements OnDatabaseChangedListener {
 
     private static final String LOG_TAG = "SavedRecordAdapter";
-
     private DBHelper mDatabase;
-
     RecordItem item;
     Context mContext;
     LinearLayoutManager llm;
 
-    public SavedRecordAdapter(Context context,
-                              LinearLayoutManager linearLayoutManager) {
+    public SavedRecordAdapter(Context context, LinearLayoutManager linearLayoutManager) {
         super();
         mContext = context;
         mDatabase = new DBHelper(mContext);
         mDatabase.setOnDatabaseChangedListener(this);
+        Log.e("Database","Count="+mDatabase.getCount());
         llm = linearLayoutManager;
     }
 
     @Override
-    public void onBindViewHolder(final RecordingsViewHolder holder,
-                                 int position) {
+    public void onBindViewHolder(final RecordingsViewHolder holder, int position) {
         item = getItem(position);
         if (item != null) {
-
             long itemDuration = item.getLength();
-
             final long minutes = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(itemDuration);
             long seconds = java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(itemDuration)
                     - java.util.concurrent.TimeUnit.MINUTES.toSeconds(minutes);
@@ -230,15 +220,9 @@ public class SavedRecordAdapter
     }
 
     @Override
-    public RecordingsViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-
-        View itemView = LayoutInflater.
-                from(parent.getContext()).
-                inflate(R.layout.item_card_view, parent, false);
-
+    public RecordingsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_view, parent, false);
         mContext = parent.getContext();
-
         return new RecordingsViewHolder(itemView);
     }
 

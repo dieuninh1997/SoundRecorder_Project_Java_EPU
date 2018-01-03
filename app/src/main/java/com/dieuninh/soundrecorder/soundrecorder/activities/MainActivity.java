@@ -21,7 +21,7 @@ import com.dieuninh.soundrecorder.soundrecorder.fragments.SavedRecordFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG=MainActivity.class.getSimpleName();
+  //  private static final String LOG_TAG=MainActivity.class.getSimpleName();
     private PagerSlidingTabStrip tabs;
     private ViewPager pager;
     private Resources resources;
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        resources=getResources();
         initPermissions();
         initControls();
         addEvents();
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     //my adapter
     private class MyAdapter extends FragmentPagerAdapter{
 
-        private String[] titles={"Record","Saved recordings"};
+        private String[] titles={"Record","Files"};
 
         public MyAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);

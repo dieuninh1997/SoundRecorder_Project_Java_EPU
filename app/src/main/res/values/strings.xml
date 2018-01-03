@@ -9,7 +9,7 @@
     <string name="record_in_progress">Recording</string>
     <string name="recording">Recording</string>
     <string name="click_to_stop">Click to stop</string>
-    <string name="default_file_name">My recording</string>
+    <string name="default_file_name">File</string>
     <string name="toast_recording_finish">Saved to</string>
     <string name="dialog_title_delete">Delete file</string>
     <string name="dialog_text_delete">Are yout sure that you would like to delete this file?</string>

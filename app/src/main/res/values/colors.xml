@@ -3,6 +3,8 @@
     <color name="colorPrimary">#03A9F4</color>
     <color name="colorPrimaryDark">#0288D1</color>
     <color name="colorAccent">#FF9800</color>
+
+
     <color name="color_background">#9f97e6fd</color>
     <color name="grid_line">#66ffffff</color>
     <color name="waveform_selected">#33b5e5</color>

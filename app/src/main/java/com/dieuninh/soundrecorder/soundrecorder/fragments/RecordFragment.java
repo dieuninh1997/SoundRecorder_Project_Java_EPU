@@ -23,14 +23,11 @@ import java.io.File;
 
 import developer.shivam.library.WaveView;
 
-/**
- * Created by DieuLinh on 3/30/2017.
- */
 
 public class RecordFragment extends Fragment{
 
     private static final String POSITION="position";
-    private static final String LOG_TAG=RecordFragment.class.getSimpleName();
+ //   private static final String LOG_TAG=RecordFragment.class.getSimpleName();
 
     private int position;
     //record controls
@@ -43,8 +40,7 @@ public class RecordFragment extends Fragment{
     private int mRecordPromptCount=0;
     private boolean mStartRecording=true;
     private boolean mPauseRecording=true;
-    private long timeWhenPaused=0;
-
+    private long timeWhenPaused=0; //stores time when user clicks pause button
 
     public static RecordFragment newInstance(int position)
     {
@@ -59,7 +55,7 @@ public class RecordFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        position = getArguments().getInt(POSITION);
+        this.position= getArguments().getInt(POSITION);
     }
 
     @Nullable
@@ -162,7 +158,7 @@ public class RecordFragment extends Fragment{
         }
     }
 
-    //TODO: implement pause recording
+    //TODO: implement pause recording, now only have stop recording :))
     private void onPauseRecord(boolean pause) {
         if (pause) {
             //pause recording
