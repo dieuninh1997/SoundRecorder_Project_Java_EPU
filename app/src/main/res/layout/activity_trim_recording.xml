@@ -13,22 +13,40 @@
         android:weightSum="3">
 
         <RelativeLayout
+            android:id="@+id/contain1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:background="@color/color_grey">
+            android:background="@color/color_background">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+                <ImageView
+                    android:src="@drawable/ic_wave_logo"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/img"
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+                <TextView
+                    android:layout_toRightOf="@+id/img"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/tenfile"
+                    android:text="Demo beo ngu"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
                 <com.triggertrap.seekarc.SeekArc
                     android:id="@+id/seekbar_song_play"
-                    android:layout_width="220dp"
-                    android:layout_height="220dp"
-                    android:layout_centerInParent="true"
+                    android:layout_width="330dp"
+                    android:layout_height="330dp"
                     android:clickable="false"
+                    android:layout_centerInParent="true"
                     android:padding="30dp"
+                    app:enabled="false"
                     seekarc:progressColor="@color/colorAccent"
                     seekarc:rotation="180"
                     seekarc:startAngle="50"
@@ -36,8 +54,8 @@
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_artwork"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
                     android:layout_centerInParent="true"
                     android:src="@drawable/cd_drive" />
 
@@ -47,28 +65,24 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_artwork"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp" />
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fab_cut"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginRight="16dp"
-                    android:src="@drawable/ic_content_cut_black_24dp"
-                    android:background="@color/colorAccent"
-                    />
-
+                    android:textSize="36sp" />
             </RelativeLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_cut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@color/colorAccent"
+                android:src="@drawable/ic_content_cut_black_24dp" />
 
             <ImageView
                 android:id="@+id/iv_play_pause"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_play_arrow_white_24px" />
 
@@ -104,8 +118,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:layout_toStartOf="@+id/tv_from"
                         android:layout_toEndOf="@+id/txt_from"
+                        android:layout_toStartOf="@+id/tv_from"
                         android:max="100"
                         app:markerColor="@color/colorPrimary"
                         app:markerTextColor="#ffffff" />
@@ -139,8 +153,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
-                        android:layout_toStartOf="@+id/tv_to"
                         android:layout_toEndOf="@+id/txt_to"
+                        android:layout_toStartOf="@+id/tv_to"
                         android:max="100"
                         app:markerColor="@color/colorPrimary"
                         app:markerTextColor="#ffffff" />

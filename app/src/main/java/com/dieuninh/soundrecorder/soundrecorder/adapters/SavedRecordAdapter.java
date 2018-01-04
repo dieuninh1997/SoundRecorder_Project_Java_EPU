@@ -131,7 +131,7 @@ public class SavedRecordAdapter extends RecyclerView.Adapter<SavedRecordAdapter.
         RecordItem data =getItem(position);
         Intent intent = new Intent(mContext, TrimRecordingActivity.class);
         intent.putExtra(Constant.FILE_PATH, data.getFilePath());
-      //  intent.putExtra(Constant.ARTWORK, data.song_artwork);
+          intent.putExtra(Constant.FILE_NAME, data.getName());
         mContext.startActivity(intent);
     }
     private void deleteFileDialog(final int position) {

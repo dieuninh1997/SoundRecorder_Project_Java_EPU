@@ -3,6 +3,7 @@ package com.dieuninh.soundrecorder.soundrecorder.activities;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.bq.markerseekbar.MarkerSeekBar;
 import com.dieuninh.soundrecorder.soundrecorder.R;
 import com.dieuninh.soundrecorder.soundrecorder.SoundFile;
+import com.dieuninh.soundrecorder.soundrecorder.data.DBHelper;
 import com.dieuninh.soundrecorder.soundrecorder.utility.Constant;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -30,14 +32,16 @@ import com.triggertrap.seekarc.SeekArc;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.io.StringWriter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TrimRecordingActivity extends AppCompatActivity implements View.OnClickListener{
+public class TrimRecordingActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String fPath = "", artwork = "";
-    long from_time, to_time, total_duration, current_time;
+    private String fPath = "",fName = "";
+    //long from_time, to_time;
+    long total_duration, current_time;
     private MarkerSeekBar marker_seekbar_from, marker_seekbar_to;
     private MediaMetadataRetriever retriever;
     private ImageView iv_play_pause;
@@ -47,22 +51,17 @@ public class TrimRecordingActivity extends AppCompatActivity implements View.OnC
     private MediaPlayer mediaPlayer;
     private TextView tv_from, tv_to;
     private FloatingActionButton fab_cut;
-    private ImageLoader imageLoader;
-    private DisplayImageOptions options;
+    private TextView txtTenFile;
     private Animation animation;
-    private SoundFile mSoundFile;
 
     //UI
- //   private Button bt_save;
-
-    //DTO and VO
-    private double start_point = 0;
-    private double end_point = 0;
-    //Thread
-    private Thread mRecordAudioThread;
-    private Thread mSaveSoundFileThread;
+    private long start_point = 0;
+    private long end_point = 0;
     //Handler
     private Handler mHandler;
+
+    //thread
+    private Thread mSaveSoundFileThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,36 +70,21 @@ public class TrimRecordingActivity extends AppCompatActivity implements View.OnC
 
         mHandler = new Handler();
         fPath = getIntent().getStringExtra(Constant.FILE_PATH);
+        fName=getIntent().getStringExtra(Constant.FILE_NAME);
 
-        artwork = getIntent().getStringExtra(Constant.ARTWORK);
-        imageLoader = ImageLoader.getInstance();// Get singleton instance
-
-        options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_wave_logo)
-                .showImageForEmptyUri(R.drawable.ic_wave_logo)
-                .showImageOnFail(R.drawable.ic_wave_logo)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .considerExifParams(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
+        txtTenFile= (TextView) findViewById(R.id.tenfile);
+        txtTenFile.setText(fName);
         getMusicDataFromPath();
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(fPath);
             mediaPlayer.prepare();
-            mSoundFile = SoundFile.create(fPath);
         } catch (IOException e) {
             e.printStackTrace();
-       } catch (SoundFile.InvalidInputException e) {
-            e.printStackTrace();
         }
-
         animation = AnimationUtils.loadAnimation(this, R.anim.rotation);
         animation.setDuration(total_duration);
         iv_artwork = (CircleImageView) findViewById(R.id.iv_artwork);
-
-       // imageLoader.displayImage(iv_artwork, options);
 
         tv_to = (TextView) findViewById(R.id.tv_to);
         tv_from = (TextView) findViewById(R.id.tv_from);
@@ -115,6 +99,7 @@ public class TrimRecordingActivity extends AppCompatActivity implements View.OnC
                 tv_from.setText(getDisplayTextFrompProgress(seekBar.getProgress()));
 
                 start_point = getSecondFromProgress(seekBar.getProgress());
+                Toast.makeText(TrimRecordingActivity.this,"start_point="+start_point,Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -135,7 +120,7 @@ public class TrimRecordingActivity extends AppCompatActivity implements View.OnC
 
                 tv_to.setText(getDisplayTextFrompProgress(seekBar.getProgress()));
                 end_point = getSecondFromProgress(seekBar.getProgress());
-
+                Toast.makeText(TrimRecordingActivity.this,"end_point="+end_point,Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -192,16 +177,87 @@ public class TrimRecordingActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    /*TODO: bug đoạn lôi progress bar lại thì chorme chạy tiếp ++
-    * */
-    private void saveRingtone(String fPath, double start_point, double end_point) {
+    //save file cut-> create new file and save into database
+    private void saveRingtone(final String fPath, long start_point, long end_point) {
+        final long duration = (start_point - end_point);
+        final long minutes = java.util.concurrent.TimeUnit.MILLISECONDS.toMinutes(duration);
+        long seconds = java.util.concurrent.TimeUnit.MILLISECONDS.toSeconds(duration)
+                - java.util.concurrent.TimeUnit.MINUTES.toSeconds(minutes);
+        // Save the sound file in a background thread
+        //aac
+        String outpath = makeRingtoneFilename(fPath, ".m4a");
+        if (outpath == null) {
+            Toast.makeText(TrimRecordingActivity.this, "Fail to create", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        File outFile = new File(outpath);
+        try {
+            // Write the new file
+            DBHelper mDatabase = new DBHelper(getApplicationContext());
+            mDatabase.addRecording(fPath + "_trim", outpath, duration);
+            Toast.makeText(TrimRecordingActivity.this, "Trim successfully , soLg="+mDatabase.getCount(), Toast.LENGTH_SHORT).show();
 
+
+        } catch (Exception e) {
+            Log.e("Save file cut", "Error: Failed to create " + outpath);
+
+        }
     }
+
+    private String makeRingtoneFilename(CharSequence title, String extension) {
+        String subdir;
+        String externalRootDir = Environment.getExternalStorageDirectory().getPath();
+        if (!externalRootDir.endsWith("/")) {
+            externalRootDir += "/";
+        }
+
+        subdir = "/SoundRecorder/";
+
+        String parentdir = externalRootDir + subdir;
+
+        // Create the parent directory
+        File parentDirFile = new File(parentdir);
+        parentDirFile.mkdirs();
+
+        // If we can't write to that special path, try just writing
+        // directly to the sdcard
+        if (!parentDirFile.isDirectory()) {
+            parentdir = externalRootDir;
+        }
+
+        // Turn the title into a filename
+        String filename = "";
+        for (int i = 0; i < title.length(); i++) {
+            if (Character.isLetterOrDigit(title.charAt(i))) {
+                filename += title.charAt(i);
+            }
+        }
+
+        // Try to make the filename unique
+        String path = null;
+        for (int i = 0; i < 100; i++) {
+            String testPath;
+            if (i > 0)
+                testPath = parentdir + filename + i + extension;
+            else
+                testPath = parentdir + filename + extension;
+
+            try {
+                RandomAccessFile f = new RandomAccessFile(new File(testPath), "r");
+                f.close();
+            } catch (Exception e) {
+                // Good, the file didn't exist
+                path = testPath;
+                break;
+            }
+        }
+
+        return path;
+    }
+
 
     /**
      * method to get current progress
-     *
-     *
      */
     private int getProgress(long d) {
         int x = 0;
@@ -240,6 +296,7 @@ public class TrimRecordingActivity extends AppCompatActivity implements View.OnC
         }
         return displayText;
     }
+
     /**
      * method to get music data from path
      */
@@ -258,6 +315,8 @@ public class TrimRecordingActivity extends AppCompatActivity implements View.OnC
                 handlePlayPause();
                 break;
             case R.id.fab_cut:
+                Toast.makeText(TrimRecordingActivity.this, "CLick to cut button", Toast.LENGTH_SHORT).show();
+
                 saveRingtone(fPath, start_point, end_point);
                 break;
 
